@@ -16,17 +16,17 @@
 프로젝트는 코틀린의 컬렉션 계층 구조를 따릅니다:
 
 ### 1단계: 핵심 인터페이스 (Core Interfaces)
-- **Iterable 계층**: `MyIterable<out T>` vs `MyMutableIterable<T>`
-- **Collection 계층**: `MyCollection<out T>` vs `MyMutableCollection<T>`
-- **List 계층**: `MyList<out T>` vs `MyMutableList<T>`
+- **Iterable 계층**: `KIterable<out T>` vs `KMutableIterable<T>`
+- **Collection 계층**: `KCollection<out T>` vs `KMutableCollection<T>`
+- **List 계층**: `KList<out T>` vs `KMutableList<T>`
 
 ### 2단계: 선형 자료구조 (Linear Data Structures)
-- **리스트 구현**: `MyArrayList` (동적 배열), `MyLinkedList` (이중 연결 리스트)
-- **스택/큐**: `MyStack`, `MyQueue`, `MyDeque`
+- **리스트 구현**: `KArrayList` (동적 배열), `KLinkedList` (이중 연결 리스트)
+- **스택/큐**: `KStack`, `KQueue`, `KDeque`
 
 ### 3단계: 비선형 자료구조 (Non-linear Data Structures)
-- **맵 (Maps)**: `MyMap<K, out V>` vs `MyMutableMap<K, V>` (해시 테이블, 트리 기반)
-- **셋 (Sets)**: `MySet<out T>` vs `MyMutableSet<T>`
+- **맵 (Maps)**: `KMap<K, out V>` vs `KMutableMap<K, V>` (해시 테이블, 트리 기반)
+- **셋 (Sets)**: `KSet<out T>` vs `KMutableSet<T>`
 
 ## 개발 환경 (Environment)
 - **Language**: Kotlin 2.2.0 (JVM Target 21)
