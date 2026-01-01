@@ -1,36 +1,24 @@
 package covariant
 
-open class Food()
-class Pizza : Food()
+interface Food
+class Pizza : Food
 
-interface Restaurant<out T> {
-    fun serve(): T
-}
-
-class PizzaRestaurant : Restaurant<Pizza> {
-    override fun serve(): Pizza = Pizza()
-}
+interface Restaurant<out T>
+class PizzaRestaurant : Restaurant<Pizza>
 
 interface Critic<in T> {
-    fun evaluate(item: T) // T를 안으로(in) 받습니다.
+    fun evaluate(item: T) // T를 받아서 '평가'함 (소비)
 }
 
 class FoodCritic : Critic<Food> {
-    override fun evaluate(item: Food) {
-        println("음 훌륭한 음식이군: $item")
-    }
+    override fun evaluate(item: Food) = println("맛 평가 중: $item")
 }
 
 fun main() {
-    // [공변성 테스트]
-    // 피자 식당은 음식 식당으로 취급될 수 있습니다.
-    val pizzaRestaurant: Restaurant<Pizza> = PizzaRestaurant()
-    val foodRestaurant: Restaurant<Food> = pizzaRestaurant
-    val food = foodRestaurant.serve()
-    println(food::class.java)
+    // [out: 공급자] 피자 맛집은 '맛집(Food)'이라고 불러도 된다.
+    val foodRestaurant: Restaurant<Food> = PizzaRestaurant()
 
-    // [반공변성 테스트]
-    // 음식 평론가는 피자 평론가 자리에 대신 갈 수 있습니다.
+    // [in: 소비자] 미식가(Food)는 '피자 평가단(Pizza)'에 들어가도 된다.
     val foodCritic: Critic<Food> = FoodCritic()
     val pizzaCritic: Critic<Pizza> = foodCritic
     pizzaCritic.evaluate(Pizza())
@@ -38,18 +26,24 @@ fun main() {
 
 /*
 
-- out : 해당 인터페이스에서는 T 를 입력 받지 않고 출력만 하겠다고 컴파일러에게 약속하는 행위. 그러므로 T에 T1, T2, T3.. 이 와도 최상위 부모인 T로 취급해도 된다.
-    * 왜 안전한가? (Why Safe?):
-      만약 T를 입력(소비)할 수 있다면, `Restaurant<Food>` 타입 변수에 `PizzaRestaurant`가 할당되었을 때,
-      `restock(Burger())` 같은 호출이 가능해집니다. (Burger는 Food이므로).
-      하지만 실제 객체는 `PizzaRestaurant`이므로 Burger를 저장할 수 없어 런타임 오류가 발생합니다.
-      `out`은 입력 메서드 자체를 컴파일 단계에서 금지함으로써, 잘못된 타입이 들어가는 상황을 원천 봉쇄하여 안전성을 보장합니다.
+### 공변성, 반공변성 사용 목적
+상속 관계를 가진 클래스들(T1, T2, T3 ...)을 Generic 으로 다루는 클래스들의 포함관계를 유연하게 다루기 위함.
+기본적으로 제네릭은 **무공변(Invariant)**이라 서로 관계가 없다. (Pizza는 Food이지만, Restaurant<Pizza>는 Restaurant<Food>가 아님).
 
-- in : 해당 인터페이스에서는 T 를 출력 하지 않고 입력만 하겠다고 컴파일러에게 약속하는 행위.
-    * 왜 안전한가? (Why Safe?):
-      `Food`를 평가할 수 있는 평론가(`Critic<Food>`)는 당연히 `Pizza`도 평가할 수 있습니다. (Pizza는 Food이므로).
-      따라서 `Critic<Pizza>`(피자 평론가)가 필요한 자리에 `Critic<Food>`(음식 평론가)를 배치해도 논리적으로 안전합니다.
-      이 때문에 컴파일러는 `Critic<Food>`를 `Critic<Pizza>`의 **하위 타입**으로 간주합니다.
-      하위 타입을 상위 타입 변수에 대입하는 것(Upcasting)이므로, **명시적 캐스팅이 필요 없습니다.**
+**이를 해결하기 위해, 상속 관계를 가진 클래스들을 제네릭으로 다룰 때 **포함 관계(Subtyping)를 유연하고 안전하게 확장**하는 것이 목적.**
+
+### 용어의 뜻 (Etymology)
+- **공변성 (Covariance)**: 공(共, 함께) + 변(變, 변한다).
+    - 타입(`T`)의 상속 방향과 제네릭(`List<T>`)의 상속 방향이 **함께(같은 방향으로)** 유지된다.
+- **반공변성 (Contravariance)**: 반(反, 반대로) + 공변.
+    - 타입(`T`)의 상속 방향과 제네릭(`List<T>`)의 상속 방향이 **반대로(역방향으로)** 뒤집힌다.
+
+### 공변성[out]
+핵심은 **"더 구체적인 것(자식)을 주는 것은, 추상적인 것(부모)을 원하는 사람의 기대를 100% 충족시킨다"** 라는 것이다.
+ex: "버튼을 누르면 뭐가 나오든 간에, 최소한 **먹을 수 있는 것(Food)**이 나오겠지?"
+
+### 반공변성[in]
+핵심은 **"추상적인 것(부모)을 처리할 수 있는 능력은, 구체적인 것(자식)을 처리해야 하는 상황을 100% 커버한다"** 라는 것이다.
+ex: "나는 **피자(Pizza)**를 가지고 있는데, 너 **음식(Food)**이면 다 평가할 수 있지? 그럼 내 피자도 평가해줘."
 
 */
