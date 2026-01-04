@@ -2,7 +2,7 @@ package collection.list;
 
 public class JSinglyLinkedList<T> {
 
-    private Node<T> head;
+    private SingleLinkedNode<T> head;
     private int size;
 
     public JSinglyLinkedList() {
@@ -16,14 +16,14 @@ public class JSinglyLinkedList<T> {
             return null;
         }
 
-        Node<T> currentNode = head;
-        while (currentNode != null) {
-            T currentItem = currentNode.getItem();
+        SingleLinkedNode<T> currentSingleLinkedNode = head;
+        while (currentSingleLinkedNode != null) {
+            T currentItem = currentSingleLinkedNode.getItem();
 
             if (target.equals(currentItem)) {
                 return currentItem;
             } else {
-                currentNode = currentNode.getNext();
+                currentSingleLinkedNode = currentSingleLinkedNode.getNext();
             }
         }
 
@@ -31,24 +31,24 @@ public class JSinglyLinkedList<T> {
     }
 
     // 시간복잡도 : O(N) (prev를 찾기 위해 탐색해야 함)
-    public boolean removeNode(Node<T> nodeToRemove) {
-        if (nodeToRemove == null || head == null) {
+    public boolean removeNode(SingleLinkedNode<T> singleLinkedNodeToRemove) {
+        if (singleLinkedNodeToRemove == null || head == null) {
             return false;
         }
 
         // 삭제하려는 노드가 head인 경우 (O(1))
-        if (nodeToRemove == head) {
+        if (singleLinkedNodeToRemove == head) {
             head = head.getNext();
             size--;
             return true;
         }
 
         // 그 외의 경우: prev 노드를 찾아야 함 (O(N))
-        Node<T> current = head;
+        SingleLinkedNode<T> current = head;
         while (current != null) {
-            if (current.getNext() == nodeToRemove) {
+            if (current.getNext() == singleLinkedNodeToRemove) {
                 // current가 prev 노드임. 연결 건너뛰기 수행
-                current.setNext(nodeToRemove.getNext());
+                current.setNext(singleLinkedNodeToRemove.getNext());
                 size--;
                 return true;
             }
@@ -59,19 +59,19 @@ public class JSinglyLinkedList<T> {
     }
 
     // 시간복잡도 : O(N)
-    public Node<T> searchNode(T target) {
+    public SingleLinkedNode<T> searchNode(T target) {
         if (target == null) {
             return null;
         }
 
-        Node<T> currentNode = head;
-        while (currentNode != null) {
-            T currentItem = currentNode.getItem();
+        SingleLinkedNode<T> currentSingleLinkedNode = head;
+        while (currentSingleLinkedNode != null) {
+            T currentItem = currentSingleLinkedNode.getItem();
 
             if (target.equals(currentItem)) {
-                return currentNode;
+                return currentSingleLinkedNode;
             } else {
-                currentNode = currentNode.getNext();
+                currentSingleLinkedNode = currentSingleLinkedNode.getNext();
             }
         }
 
@@ -79,16 +79,16 @@ public class JSinglyLinkedList<T> {
     }
 
     // 시간복잡도 : O(1)
-    public void insertAfter(T newItem, Node<T> node) {
-        if (node == null) return;
-        Node<T> newNode = new Node<>(newItem, node.getNext());
-        node.setNext(newNode);
+    public void insertAfter(T newItem, SingleLinkedNode<T> singleLinkedNode) {
+        if (singleLinkedNode == null) return;
+        SingleLinkedNode<T> newSingleLinkedNode = new SingleLinkedNode<>(newItem, singleLinkedNode.getNext());
+        singleLinkedNode.setNext(newSingleLinkedNode);
         size++;
     }
 
     // 시간복잡도 : O(1)
     public void insertFront(T newItem) {
-        head = new Node<>(newItem, head);
+        head = new SingleLinkedNode<>(newItem, head);
         size++;
     }
 
@@ -97,7 +97,7 @@ public class JSinglyLinkedList<T> {
     }
 
     public void print() {
-        Node<T> current = head;
+        SingleLinkedNode<T> current = head;
         System.out.print("[");
         while (current != null) {
             System.out.print(current.getItem());
