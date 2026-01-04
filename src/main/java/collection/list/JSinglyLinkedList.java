@@ -80,7 +80,9 @@ public class JSinglyLinkedList<T> {
 
     // 시간복잡도 : O(1)
     public void insertAfter(T newItem, SingleLinkedNode<T> singleLinkedNode) {
-        if (singleLinkedNode == null) return;
+        if (singleLinkedNode == null) {
+            return;
+        }
         SingleLinkedNode<T> newSingleLinkedNode = new SingleLinkedNode<>(newItem, singleLinkedNode.getNext());
         singleLinkedNode.setNext(newSingleLinkedNode);
         size++;
