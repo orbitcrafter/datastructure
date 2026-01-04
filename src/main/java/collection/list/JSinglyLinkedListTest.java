@@ -11,34 +11,29 @@ public class JSinglyLinkedListTest {
         list.insertFront("C");
         list.insertFront("B");
         list.insertFront("A");
-        
-        System.out.print("Current List: ");
         list.print(); // 예상: [A, B, C]
-        System.out.println("Size: " + list.size()); // 예상: 3
 
-        // 2. searchNode 테스트
-        System.out.println("\n[2] searchNode('B')");
+        // 2. searchNode & insertAfter 테스트
+        System.out.println("\n[2] searchNode('B') & insertAfter('Inserted', Node('B'))");
         Node<String> nodeB = list.searchNode("B");
         if (nodeB != null) {
-            System.out.println("Found Node with item: " + nodeB.getItem());
-        } else {
-            System.out.println("Node not found!");
+            list.insertAfter("Inserted", nodeB);
+            list.print(); // 예상: [A, B, Inserted, C]
         }
 
-        // 3. insertAfter 테스트 (B 뒤에 삽입)
-        System.out.println("\n[3] insertAfter('InsertedItem', Node('B'))");
-        if (nodeB != null) {
-            list.insertAfter("InsertedItem", nodeB);
-            list.print(); // 예상: [A, B, InsertedItem, C]
-            System.out.println("Size: " + list.size()); // 예상: 4
-        } else {
-            System.out.println("Cannot test insertAfter: Node 'B' not found.");
-        }
+        // 3. removeNode 테스트 (O(N) 삭제)
+        System.out.println("\n[3] removeNode(Node('B')) - O(N)");
+        // 아까 찾은 nodeB를 그대로 사용해서 삭제 시도
+        boolean removed = list.removeNode(nodeB);
+        System.out.println("Removed successfully? " + removed);
+        list.print(); // 예상: [A, Inserted, C] (B가 사라져야 함)
+        System.out.println("Size: " + list.size()); // 예상: 3
 
-        // 4. 없는 값 검색
-        System.out.println("\n[4] search('Z') (Not exists)");
-        String notFound = list.search("Z");
-        System.out.println("Result: " + notFound); // 예상: null
+        // 4. 없는 노드 삭제 시도
+        System.out.println("\n[4] removeNode(new Node('Z')) (Not in list)");
+        Node<String> fakeNode = new Node<>("Z", null);
+        boolean removedFake = list.removeNode(fakeNode);
+        System.out.println("Removed fake node? " + removedFake); // 예상: false
 
         System.out.println("\n========== JSinglyLinkedList Test End ==========");
     }

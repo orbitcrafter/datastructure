@@ -30,6 +30,34 @@ public class JSinglyLinkedList<T> {
         return null;
     }
 
+    // 시간복잡도 : O(N) (prev를 찾기 위해 탐색해야 함)
+    public boolean removeNode(Node<T> nodeToRemove) {
+        if (nodeToRemove == null || head == null) {
+            return false;
+        }
+
+        // 삭제하려는 노드가 head인 경우 (O(1))
+        if (nodeToRemove == head) {
+            head = head.getNext();
+            size--;
+            return true;
+        }
+
+        // 그 외의 경우: prev 노드를 찾아야 함 (O(N))
+        Node<T> current = head;
+        while (current != null) {
+            if (current.getNext() == nodeToRemove) {
+                // current가 prev 노드임. 연결 건너뛰기 수행
+                current.setNext(nodeToRemove.getNext());
+                size--;
+                return true;
+            }
+            current = current.getNext();
+        }
+
+        return false; // 리스트에 없는 노드인 경우
+    }
+
     // 시간복잡도 : O(N)
     public Node<T> searchNode(T target) {
         if (target == null) {
